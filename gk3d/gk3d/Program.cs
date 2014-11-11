@@ -1,5 +1,3 @@
-using System;
-
 namespace gk3d
 {
 #if WINDOWS || XBOX
@@ -10,7 +8,7 @@ namespace gk3d
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game game = new Game())
+            using (var game = new Game())
             {
                 game.Run();
             }
