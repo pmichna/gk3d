@@ -88,6 +88,8 @@ namespace gk3d
                     _arena.LeftPost.Indices, 0, _arena.LeftPost.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.RightPost.Vertices, 0, _arena.RightPost.Vertices.Length,
                     _arena.RightPost.Indices, 0, _arena.RightPost.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.Net.Vertices, 0, _arena.Net.Vertices.Length,
+                    _arena.Net.Indices, 0, _arena.Net.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
             }
         }
     }
