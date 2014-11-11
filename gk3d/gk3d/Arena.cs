@@ -22,7 +22,6 @@ namespace gk3d
             RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.White);
             Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.Beige);
             _bench = content.Load<Model>("bench");
-
         }
 
         public void Draw(Camera camera)

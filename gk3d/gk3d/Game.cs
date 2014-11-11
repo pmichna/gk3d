@@ -9,6 +9,18 @@ namespace gk3d
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
+        private const float ARENA_CENTER_X = 0;
+        private const float ARENA_CENTER_Y = 0;
+        private const float ARENA_CENTER_Z = 0;
+        private const int ARENA_WIDTH = 200;
+        private const int ARENA_HEIGHT = 50;
+        private const int ARENA_DEPTH = 400;
+        private const int BACK_BUFFER_WIDTH = 1360;
+        private const int BACK_BUFFER_HEIGHT = 760;
+        private const bool IS_FULL_SCREEN = true;
+        private const string AUTHOR_NAME = "Pawel Michna";
+        private static readonly Color ARENA_COLOR = Color.Yellow;
+
         private readonly GraphicsDeviceManager _graphics;
         private Arena _arena;
         private Camera _camera;
@@ -27,11 +39,11 @@ namespace gk3d
         /// </summary>
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1360;
-            _graphics.PreferredBackBufferHeight = 760;
-            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = BACK_BUFFER_WIDTH;
+            _graphics.PreferredBackBufferHeight = BACK_BUFFER_HEIGHT;
+            _graphics.IsFullScreen = IS_FULL_SCREEN;
             _graphics.ApplyChanges();
-            Window.Title = "Pawel Michna";
+            Window.Title = AUTHOR_NAME;
             base.Initialize();
         }
 
@@ -41,7 +53,8 @@ namespace gk3d
         /// </summary>
         protected override void LoadContent()
         {
-            _arena = new Arena(Content, GraphicsDevice, new Vector3(0, 0, 0), 200, 50, 400, Color.Yellow);
+            _arena = new Arena(Content, GraphicsDevice, new Vector3(ARENA_CENTER_X, ARENA_CENTER_Y, ARENA_CENTER_Z),
+                ARENA_WIDTH, ARENA_HEIGHT, ARENA_DEPTH, ARENA_COLOR);
             _camera = new Camera(GraphicsDevice.Viewport);
         }
 
