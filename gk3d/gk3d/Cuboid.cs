@@ -9,9 +9,9 @@ namespace gk3d
         public VertexPositionColorNormal[] Vertices { get; private set; }
         public int[] Indices { get; private set; }
         public Vector3 Center { get; private set; }
-        private int Width { get; set; }
-        private int Height { get; set; }
-        private int Depth { get; set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public int Depth { get; private set; }
         private Color Color { get; set; }
 
         public Cuboid(Vector3 center, int width, int height, int depth, bool isVisibleInside, Color color)
