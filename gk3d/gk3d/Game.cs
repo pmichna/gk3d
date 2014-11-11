@@ -32,7 +32,7 @@ namespace gk3d
             _graphics.PreferredBackBufferHeight = 760;
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
-            Window.Title = "Pawe³ Michna";
+            Window.Title = "Pawel Michna";
             base.Initialize();
         }
 
@@ -84,6 +84,10 @@ namespace gk3d
                 pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.Vertices, 0, _arena.Vertices.Length,
                     _arena.Indices, 0, _arena.Indices.Length/3, VertexPositionColor.VertexDeclaration);
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.LeftPost.Vertices, 0, _arena.LeftPost.Vertices.Length,
+                    _arena.LeftPost.Indices, 0, _arena.LeftPost.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.RightPost.Vertices, 0, _arena.RightPost.Vertices.Length,
+                    _arena.RightPost.Indices, 0, _arena.RightPost.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
             }
         }
     }

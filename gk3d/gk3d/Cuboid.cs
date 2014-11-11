@@ -6,7 +6,7 @@ namespace gk3d
 {
     class Cuboid
     {
-        public VertexPositionColor[] Vertices { get; private set; }
+        public VertexPositionColorNormal[] Vertices { get; private set; }
         public int[] Indices { get; private set; }
         public Vector3 Center { get; private set; }
         private int Width { get; set; }
@@ -30,7 +30,7 @@ namespace gk3d
 
         private void SetUpVertices()
         {
-            Vertices = new VertexPositionColor[8];
+            Vertices = new VertexPositionColorNormal[8];
             Vertices[0].Position = new Vector3(Center.X - Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
             Vertices[0].Color = Color;
             Vertices[1].Position = new Vector3(Center.X + Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
