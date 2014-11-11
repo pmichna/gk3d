@@ -9,8 +9,11 @@ namespace gk3d
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager _graphics;
-        Effect _effect;
+        private readonly GraphicsDeviceManager _graphics;
+        private Matrix _viewMatrix;
+        private Matrix _projectionMatrix;
+        private BasicEffect _effect;
+        private Arena _arena;
 
         public Game()
         {
@@ -31,7 +34,6 @@ namespace gk3d
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             Window.Title = "Pawe³ Michna";
-
             base.Initialize();
         }
 
@@ -41,18 +43,9 @@ namespace gk3d
         /// </summary>
         protected override void LoadContent()
         {
-            _effect = Content.Load<Effect>("effects");
-
-            // TODO: use this.Content to load your game content here
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
+            SetuUpArena();
+            SetUpCamera();
+            _effect = new BasicEffect(GraphicsDevice);
         }
 
         /// <summary>
@@ -76,9 +69,18 @@ namespace gk3d
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-            // TODO: Add your drawing code here
-
+            var rs = new RasterizerState {FillMode = FillMode.WireFrame};
+            GraphicsDevice.RasterizerState = rs;
+            _effect.View = _viewMatrix;
+            _effect.Projection = _projectionMatrix;
+            _effect.World = Matrix.Identity;
+            _effect.VertexColorEnabled = true;
+            foreach (var pass in _effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _arena.Vertices, 0, _arena.Vertices.Length,
+                    _arena.Indices, 0, _arena.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+            }
             base.Draw(gameTime);
         }
 
@@ -86,6 +88,17 @@ namespace gk3d
         {
             var keys = Keyboard.GetState();
             if (keys.IsKeyDown(Keys.Escape)) Exit();
+        }
+
+        private void SetUpCamera()
+        {
+            _viewMatrix = Matrix.CreateLookAt(_arena.Center, new Vector3(50,-5,100), Vector3.Up);
+            _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
+        }
+
+        private void SetuUpArena()
+        {
+            _arena = new Arena(new Vector3(0,0,0), 100, 10, 200, Color.Yellow);
         }
     }
 }
