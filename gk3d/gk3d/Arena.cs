@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +9,7 @@ namespace gk3d
         private Cuboid LeftPost { get; set; }
         private Cuboid RightPost { get; set; }
         private Cuboid Net { get; set; }
-        private readonly Model _bench;
+        private readonly CustomModel _bench;
         private readonly BasicEffect _effect;
         private readonly GraphicsDevice _graphicsDevice;
 
@@ -22,7 +21,7 @@ namespace gk3d
             LeftPost = new Cuboid(center + new Vector3(-width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false , Color.White);
             RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.White);
             Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.Beige);
-            _bench = content.Load<Model>("bench");
+            _bench = new CustomModel("bench", content, device);
         }
 
         public void Draw(Camera camera)
@@ -93,28 +92,8 @@ namespace gk3d
 
         private void DrawBenches(Camera camera)
         {
-            var modelTransforms = new Matrix[_bench.Bones.Count];
-            var worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(-Width / 3f, -Height / 2f, -Depth / 3f));
-            _bench.CopyAbsoluteBoneTransformsTo(modelTransforms);
-            foreach (var mesh in _bench.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = modelTransforms[mesh.ParentBone.Index] * worldMatrix;
-                    effect.View = camera.ViewMatrix;
-                    effect.Projection = camera.ProjectionMatrix;
-                }
-                mesh.Draw();
-            }
-            worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(Width / 3f, -Height / 2f, Depth / 3f));
-            foreach (var mesh in _bench.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = modelTransforms[mesh.ParentBone.Index] * worldMatrix;
-                }
-                mesh.Draw();
-            }
+            _bench.Draw(camera, 0.1f, MathHelper.PiOver2, new Vector3(-Width / 3f, -Height / 2f, -Depth / 3f));
+            _bench.Draw(camera, 0.1f, MathHelper.PiOver2, new Vector3(Width / 3f, -Height / 2f, Depth / 3f));
         }
     }
 }
