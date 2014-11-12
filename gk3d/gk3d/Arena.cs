@@ -22,8 +22,13 @@ namespace gk3d
             LeftPost = new Cuboid(center + new Vector3(-width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false , Color.SandyBrown);
             RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.SandyBrown);
             Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.DarkGray);
-            _bench = new CustomModel("bench", content, device);
-            _android = new CustomModel("android", content, device);
+            _effect.LightingEnabled = true;
+            _effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
+            _effect.DirectionalLight0.Direction = new Vector3(0, -1, -0.5f);
+            _effect.DirectionalLight0.Enabled = true;
+            _effect.VertexColorEnabled = true;
+            _bench = new CustomModel(_effect, "bench", content, device);
+            _android = new CustomModel(_effect, "android", content, device);
         }
 
         public void Draw(Camera camera)
@@ -46,12 +51,11 @@ namespace gk3d
             _effect.View = camera.ViewMatrix;
             _effect.Projection = camera.ProjectionMatrix;
             _effect.World = Matrix.Identity;
-            _effect.VertexColorEnabled = true;
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, Vertices, 0, Vertices.Length,
-                    Indices, 0, Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+                    Indices, 0, Indices.Length / 3, VertexPositionColorNormal.VertexDeclaration);
             }
         }
 
@@ -60,12 +64,11 @@ namespace gk3d
             _effect.View = camera.ViewMatrix;
             _effect.Projection = camera.ProjectionMatrix;
             _effect.World = Matrix.Identity;
-            _effect.VertexColorEnabled = true;
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, LeftPost.Vertices, 0, LeftPost.Vertices.Length,
-                    LeftPost.Indices, 0, LeftPost.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+                    LeftPost.Indices, 0, LeftPost.Indices.Length / 3, VertexPositionColorNormal.VertexDeclaration);
             }
         }
 
@@ -74,13 +77,12 @@ namespace gk3d
             _effect.View = camera.ViewMatrix;
             _effect.Projection = camera.ProjectionMatrix;
             _effect.World = Matrix.Identity;
-            _effect.VertexColorEnabled = true;
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, RightPost.Vertices, 0,
                     RightPost.Vertices.Length,
-                    RightPost.Indices, 0, RightPost.Indices.Length/3, VertexPositionColor.VertexDeclaration);
+                    RightPost.Indices, 0, RightPost.Indices.Length / 3, VertexPositionColorNormal.VertexDeclaration);
             }
         }
 
@@ -89,12 +91,11 @@ namespace gk3d
             _effect.View = camera.ViewMatrix;
             _effect.Projection = camera.ProjectionMatrix;
             _effect.World = Matrix.Identity;
-            _effect.VertexColorEnabled = true;
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, Net.Vertices, 0, Net.Vertices.Length,
-                    Net.Indices, 0, Net.Indices.Length / 3, VertexPositionColor.VertexDeclaration);
+                    Net.Indices, 0, Net.Indices.Length / 3, VertexPositionColorNormal.VertexDeclaration);
             }
         }
 

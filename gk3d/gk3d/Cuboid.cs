@@ -25,6 +25,7 @@ namespace gk3d
                 SetUpInnerIndices();
             else
                 SetUpOuterIndices();
+            CalculateNormalsForTriangleList();
         }
 
         private void SetUpVertices()
@@ -106,5 +107,29 @@ namespace gk3d
             }
             return firstIndex;
         }
+
+        private void CalculateNormalsForTriangleList()
+        {
+            for (var i = 0; i < Vertices.Length; i++)
+                Vertices[i].Normal = new Vector3(0, 0, 0);
+
+            for (var i = 0; i < Indices.Length / 3; i++)
+            {
+                var firstVector = Vertices[Indices[i*3 + 1]].Position -
+                                  Vertices[Indices[i*3]].Position;
+                var secondVector = Vertices[Indices[i * 3 + 2]].Position -
+                                  Vertices[Indices[i * 3]].Position;
+                var normal = Vector3.Cross(secondVector, firstVector);
+                normal.Normalize();
+
+                Vertices[Indices[i*3]].Normal += normal;
+                Vertices[Indices[i*3 + 1]].Normal += normal;
+                Vertices[Indices[i*3 + 2]].Normal += normal;
+            }
+
+            for (var i = 0; i < Vertices.Length; i++)
+                Vertices[i].Normal.Normalize();
+        }
+
     }
 }

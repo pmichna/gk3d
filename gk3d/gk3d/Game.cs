@@ -79,7 +79,7 @@ namespace gk3d
         {
             GraphicsDevice.Clear(Color.Black);
             var rs = new RasterizerState {FillMode = FillMode.WireFrame};
-            GraphicsDevice.RasterizerState = rs;
+            //GraphicsDevice.RasterizerState = rs;
             _arena.Draw(_camera);
             base.Draw(gameTime);
         }

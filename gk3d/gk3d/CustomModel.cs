@@ -8,9 +8,12 @@ namespace gk3d
     {
         private readonly Model _model;
 
-        public CustomModel(string assetName, ContentManager content, GraphicsDevice device)
+        public CustomModel(Effect effect, string assetName, ContentManager content, GraphicsDevice device)
         {
             _model = content.Load<Model>(assetName);
+            foreach (var mesh in _model.Meshes)
+                foreach (var meshPart in mesh.MeshParts)
+                    meshPart.Effect = effect.Clone();
         }
 
         public void Draw(Camera camera, float scale, float rotationY, Vector3 translation)
