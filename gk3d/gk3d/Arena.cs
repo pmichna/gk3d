@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -93,7 +94,7 @@ namespace gk3d
         private void DrawBenches(Camera camera)
         {
             var modelTransforms = new Matrix[_bench.Bones.Count];
-            var worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateTranslation(new Vector3(-Width / 3f, -Height / 2f, 0));
+            var worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(-Width / 3f, -Height / 2f, -Depth / 3f));
             _bench.CopyAbsoluteBoneTransformsTo(modelTransforms);
             foreach (var mesh in _bench.Meshes)
             {
@@ -105,7 +106,7 @@ namespace gk3d
                 }
                 mesh.Draw();
             }
-            worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateTranslation(new Vector3(Width / 3f, -Height / 2f, 0));
+            worldMatrix = Matrix.CreateScale(0.1f, 0.1f, 0.1f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(Width / 3f, -Height / 2f, Depth / 3f));
             foreach (var mesh in _bench.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
