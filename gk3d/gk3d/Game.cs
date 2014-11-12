@@ -17,9 +17,9 @@ namespace gk3d
         private const int ARENA_DEPTH = 400;
         private const int BACK_BUFFER_WIDTH = 1360;
         private const int BACK_BUFFER_HEIGHT = 760;
-        private const bool IS_FULL_SCREEN = true;
+        private const bool IS_FULL_SCREEN = false;
         private const string AUTHOR_NAME = "Pawel Michna";
-        private static readonly Color ARENA_COLOR = Color.Yellow;
+        private static readonly Color ARENA_COLOR = Color.DarkCyan;
 
         private readonly GraphicsDeviceManager _graphics;
         private Arena _arena;

@@ -10,6 +10,7 @@ namespace gk3d
         private Cuboid RightPost { get; set; }
         private Cuboid Net { get; set; }
         private readonly CustomModel _bench;
+        private readonly CustomModel _android;
         private readonly BasicEffect _effect;
         private readonly GraphicsDevice _graphicsDevice;
 
@@ -18,10 +19,11 @@ namespace gk3d
         {
             _graphicsDevice = device;
             _effect = new BasicEffect(_graphicsDevice);
-            LeftPost = new Cuboid(center + new Vector3(-width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false , Color.White);
-            RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.White);
-            Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.Beige);
+            LeftPost = new Cuboid(center + new Vector3(-width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false , Color.SandyBrown);
+            RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.SandyBrown);
+            Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.DarkGray);
             _bench = new CustomModel("bench", content, device);
+            _android = new CustomModel("android", content, device);
         }
 
         public void Draw(Camera camera)
@@ -31,6 +33,12 @@ namespace gk3d
             DrawRightPost(_graphicsDevice, camera);
             DrawNet(_graphicsDevice, camera);
             DrawBenches(camera);
+            DrawAndroid(camera);
+        }
+
+        private void DrawAndroid(Camera camera)
+        {
+            _android.Draw(camera, 0.005f, 0, new Vector3(0, -Height / 2.3f, Depth / 3f));
         }
 
         private void DrawArena(GraphicsDevice device, Camera camera)
