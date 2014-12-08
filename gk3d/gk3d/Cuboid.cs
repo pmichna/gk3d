@@ -130,6 +130,5 @@ namespace gk3d
             for (var i = 0; i < Vertices.Length; i++)
                 Vertices[i].Normal.Normalize();
         }
-
     }
 }

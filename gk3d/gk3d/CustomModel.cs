@@ -24,11 +24,11 @@ namespace gk3d
 
             foreach (var mesh in _model.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    effect.World = modelTransforms[mesh.ParentBone.Index] * worldMatrix;
-                    effect.View = camera.ViewMatrix;
-                    effect.Projection = camera.ProjectionMatrix;
+                    effect.Parameters["xWorld"].SetValue(modelTransforms[mesh.ParentBone.Index] * worldMatrix);
+                    effect.Parameters["xView"].SetValue(camera.ViewMatrix);
+                    effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
                 }
                 mesh.Draw();
             }
