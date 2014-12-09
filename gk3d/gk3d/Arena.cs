@@ -23,14 +23,12 @@ namespace gk3d
             RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.SandyBrown);
             Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.DarkGray);
             _effect.CurrentTechnique = _effect.Techniques["SpotLight"];
-            //var lightDirection = new Vector3(0, -1, -0.5f);
-            //lightDirection.Normalize();
-            _effect.Parameters["xLightPosition"].SetValue(new Vector3(0,0,0));
-            _effect.Parameters["xAmbient"].SetValue(0.2f);
-            _effect.Parameters["xConeDirection"].SetValue(new Vector3(0, 0, 1));
-            _effect.Parameters["xConeAngle"].SetValue(0.5f);
-            _effect.Parameters["xConeDecay"].SetValue(2.0f);
-            _effect.Parameters["xLightStrength"].SetValue(0.8f);
+            _effect.Parameters["xLightPosition"].SetValue(center + new Vector3(0, height/2f, depth/4f));
+            _effect.Parameters["xAmbient"].SetValue(0.1f);
+            _effect.Parameters["xConeDirection"].SetValue(new Vector3(0, -1, 0));
+            _effect.Parameters["xConeAngle"].SetValue(0.3f);
+            _effect.Parameters["xConeDecay"].SetValue(2f);
+            _effect.Parameters["xLightStrength"].SetValue(1.5f);
             _bench = new CustomModel(_effect, "bench", content, device);
             _android = new CustomModel(_effect, "android", content, device);
         }

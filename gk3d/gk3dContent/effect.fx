@@ -26,15 +26,15 @@ SLVertexToPixel SLVertexShader(float4 inPos: POSITION0, float3 inNormal : NORMAL
 	SLVertexToPixel Output = (SLVertexToPixel)0;
 
 	float4x4 preViewProjection = mul(xView, xProjection);
-		float4x4 preWorldViewProjection = mul(xWorld, preViewProjection);
-		Output.Position = mul(inPos, preWorldViewProjection);
+	float4x4 preWorldViewProjection = mul(xWorld, preViewProjection);
+	Output.Position = mul(inPos, preWorldViewProjection);
 
 	float3 final3DPos = mul(inPos, xWorld);
-		Output.LightDirection = final3DPos - xLightPosition;
+	Output.LightDirection = final3DPos - xLightPosition;
 
 	float3x3 rotMatrix = (float3x3)xWorld;
-		float3 rotNormal = mul(inNormal, rotMatrix);
-		Output.Normal = rotNormal;
+	float3 rotNormal = mul(inNormal, rotMatrix);
+	Output.Normal = rotNormal;
 
 	Output.Color = inColor;
 
@@ -47,10 +47,10 @@ SLPixelToFrame SLPixelShader(SLVertexToPixel PSIn) : COLOR0
 
 	float4 baseColor = PSIn.Color;
 
-		float3 normal = normalize(PSIn.Normal);
-		float3 lightDirection = normalize(PSIn.LightDirection);
+	float3 normal = normalize(PSIn.Normal);
+	float3 lightDirection = normalize(PSIn.LightDirection);
 
-		float coneDot = dot(lightDirection, normalize(xConeDirection));
+	float coneDot = dot(lightDirection, normalize(xConeDirection));
 
 	float shading = 0;
 	if (coneDot > xConeAngle)
