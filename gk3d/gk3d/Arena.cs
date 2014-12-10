@@ -39,7 +39,7 @@ namespace gk3d
             //    DrawNet();
             //}
             foreach (CModel model in _models)
-                model.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
+                model.Draw(camera.ViewMatrix, camera.ProjectionMatrix, camera.CameraPosition);
         }
 
         private void SetModels(ContentManager content, GraphicsDevice device)
@@ -62,6 +62,12 @@ namespace gk3d
                 new Vector3(0, MathHelper.Pi, 0),
                 new Vector3(0.005f),
                 device));
+
+            var simpleEffect = content.Load<Effect>("SimpleEffect");
+            foreach (var model in _models)
+            {
+                model.SetModelEffect(simpleEffect, true);
+            }
         }
 
         private void DrawNet()
