@@ -10,7 +10,7 @@ namespace gk3d
         private float _leftRightRotation;
         private float _upDownRoatation;
         private const float RotationSpeed = 0.005f;
-        private Vector3 _cameraPosition;
+        public Vector3 CameraPosition;
         private MouseState _originalMouseState;
 
         public Matrix ProjectionMatrix { get; private set; }
@@ -24,7 +24,7 @@ namespace gk3d
         {
             _leftRightRotation = leftRightRotation;
             _upDownRoatation = upDownRotation;
-            _cameraPosition = startingPosition;
+            CameraPosition = startingPosition;
             _viewPort = viewPort;
 
             const float viewAngle = MathHelper.PiOver4;
@@ -75,7 +75,7 @@ namespace gk3d
             const float moveSpeed = 1f;
             var cameraRotation = Matrix.CreateRotationX(_upDownRoatation) * Matrix.CreateRotationY(_leftRightRotation);
             var rotatedVector = Vector3.Transform(vectorToAdd, cameraRotation);
-            _cameraPosition += moveSpeed * rotatedVector;
+            CameraPosition += moveSpeed * rotatedVector;
             UpdateViewMatrix();
         }
 
@@ -87,11 +87,11 @@ namespace gk3d
             var cameraOriginalUpVector = new Vector3(0, 1, 0);
 
             var cameraRotatedTarget = Vector3.Transform(cameraOriginalTarget, cameraRotation);
-            var cameraFinalTarget = _cameraPosition + cameraRotatedTarget;
+            var cameraFinalTarget = CameraPosition + cameraRotatedTarget;
 
             var cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
 
-            ViewMatrix = Matrix.CreateLookAt(_cameraPosition, cameraFinalTarget, cameraRotatedUpVector);
+            ViewMatrix = Matrix.CreateLookAt(CameraPosition, cameraFinalTarget, cameraRotatedUpVector);
         }
     }
 }

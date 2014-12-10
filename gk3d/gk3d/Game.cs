@@ -78,7 +78,7 @@ namespace gk3d
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            var rs = new RasterizerState {FillMode = FillMode.WireFrame};
+            //var rs = new RasterizerState {FillMode = FillMode.WireFrame};
             //GraphicsDevice.RasterizerState = rs;
             _arena.Draw(_camera);
             base.Draw(gameTime);

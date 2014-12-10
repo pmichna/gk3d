@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,45 +10,58 @@ namespace gk3d
         private Cuboid LeftPost { get; set; }
         private Cuboid RightPost { get; set; }
         private Cuboid Net { get; set; }
-        private readonly CustomModel _bench;
-        private readonly CustomModel _android;
-        private readonly Effect _effect;
         private readonly GraphicsDevice _graphicsDevice;
+        private readonly List<CModel> _models = new List<CModel>(3);
 
         public Arena(ContentManager content, GraphicsDevice device, Vector3 center, int width, int height, int depth, Color color)
             : base(center, width, height, depth, true, color)
         {
             _graphicsDevice = device;
-            _effect = content.Load<Effect>("effect");
             LeftPost = new Cuboid(center + new Vector3(-width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false , Color.SandyBrown);
             RightPost = new Cuboid(center + new Vector3(width * 0.2f, -height / 4f, 0), 5, height / 2, 2, false, Color.SandyBrown);
             Net = new Cuboid(center + new Vector3(0, -height / 8f, 0), (int) (RightPost.Center.X - LeftPost.Center.X), height/4, 1, false, Color.DarkGray);
-            _effect.CurrentTechnique = _effect.Techniques["SpotLight"];
-            _effect.Parameters["xLightPosition"].SetValue(center + new Vector3(0, height/2f, depth/4f));
-            _effect.Parameters["xAmbient"].SetValue(0.1f);
-            _effect.Parameters["xConeDirection"].SetValue(new Vector3(0, -1, 0));
-            _effect.Parameters["xConeAngle"].SetValue(0.3f);
-            _effect.Parameters["xConeDecay"].SetValue(2f);
-            _effect.Parameters["xLightStrength"].SetValue(1.5f);
-            _bench = new CustomModel(_effect, "bench", content, device);
-            _android = new CustomModel(_effect, "android", content, device);
+
+            SetModels(content, device);
         }
 
         public void Draw(Camera camera)
         {
-            _effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-            _effect.Parameters["xView"].SetValue(camera.ViewMatrix);
-            _effect.Parameters["xProjection"].SetValue(camera.ProjectionMatrix);
-            foreach (var pass in _effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                DrawArena();
-                DrawLeftPost();
-                DrawRightPost();
-                DrawNet();
-            }
-            DrawBenches(camera);
-            DrawAndroid(camera);
+            //_effect.Parameters["World"].SetValue(Matrix.Identity);
+            //_effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            //_effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            //_effect.Parameters["CameraPosition"].SetValue(camera.CameraPosition);
+            //foreach (var pass in _effect.CurrentTechnique.Passes)
+            //{
+            //    pass.Apply();
+            //    DrawArena();
+            //    DrawLeftPost();
+            //    DrawRightPost();
+            //    DrawNet();
+            //}
+            foreach (CModel model in _models)
+                model.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
+        }
+
+        private void SetModels(ContentManager content, GraphicsDevice device)
+        {
+            var benchModel = content.Load<Model>("bench");
+            var androidModel = content.Load<Model>("android");
+
+            _models.Add(new CModel(benchModel,
+                Center + new Vector3(-Width/3f, -Height/2f, -Depth/3f),
+                new Vector3(0, MathHelper.PiOver2, 0),
+                new Vector3(0.1f),
+                device));
+            _models.Add(new CModel(benchModel,
+                Center + new Vector3(Width/3f, -Height/2f, Depth/3f),
+                new Vector3(0, MathHelper.PiOver2, 0),
+                new Vector3(0.1f),
+                device));
+            _models.Add(new CModel(androidModel,
+                Center + new Vector3(0, -Height/2.3f, Depth/3f),
+                new Vector3(0, MathHelper.Pi, 0),
+                new Vector3(0.005f),
+                device));
         }
 
         private void DrawNet()
@@ -73,17 +87,6 @@ namespace gk3d
         {
             _graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, Vertices, 0, Vertices.Length,
                 Indices, 0, Indices.Length/3, VertexPositionColorNormal.VertexDeclaration);
-        }
-
-        private void DrawAndroid(Camera camera)
-        {
-            _android.Draw(camera, 0.005f, MathHelper.Pi, new Vector3(0, -Height / 2.3f, Depth / 3f));
-        }
-
-        private void DrawBenches(Camera camera)
-        {
-            _bench.Draw(camera, 0.1f, MathHelper.PiOver2, new Vector3(-Width / 3f, -Height / 2f, -Depth / 3f));
-            _bench.Draw(camera, 0.1f, MathHelper.PiOver2, new Vector3(Width / 3f, -Height / 2f, Depth / 3f));
         }
     }
 }
