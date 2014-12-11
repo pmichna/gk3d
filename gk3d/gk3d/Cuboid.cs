@@ -11,7 +11,7 @@ namespace gk3d
         public int Width { get; private set; }
         public int Height { get; private set; }
         public int Depth { get; private set; }
-        private Color Color { get; set; }
+        public Color Color { get; set; }
 
         public Cuboid(Vector3 center, int width, int height, int depth, bool isVisibleInside, Color color)
         {
@@ -32,22 +32,14 @@ namespace gk3d
         {
             Vertices = new VertexPositionColorNormal[8];
             Vertices[0].Position = new Vector3(Center.X - Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
-            Vertices[0].Color = Color;
             Vertices[1].Position = new Vector3(Center.X + Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
-            Vertices[1].Color = Color;
             Vertices[2].Position = new Vector3(Center.X + Width / 2f, Center.Y - Height / 2f, Center.Z - Depth / 2f);
-            Vertices[2].Color = Color;
             Vertices[3].Position = new Vector3(Center.X - Width / 2f, Center.Y - Height / 2f, Center.Z - Depth / 2f);
-            Vertices[3].Color = Color;
 
             Vertices[4].Position = new Vector3(Center.X - Width / 2f, Center.Y + Height / 2f, Center.Z + Depth / 2f);
-            Vertices[4].Color = Color;
             Vertices[5].Position = new Vector3(Center.X + Width / 2f, Center.Y + Height / 2f, Center.Z + Depth / 2f);
-            Vertices[5].Color = Color;
             Vertices[6].Position = new Vector3(Center.X + Width / 2f, Center.Y + Height / 2f, Center.Z - Depth / 2f);
-            Vertices[6].Color = Color;
             Vertices[7].Position = new Vector3(Center.X - Width / 2f, Center.Y + Height / 2f, Center.Z - Depth / 2f);
-            Vertices[7].Color = Color;
         }
 
         private void SetUpOuterIndices()

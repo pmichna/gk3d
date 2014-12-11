@@ -61,8 +61,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimpleEffect.fx">
-      <Name>SimpleEffect</Name>
+    <Compile Include="MultipleLightsEffect.fx">
+      <Name>MultipleLightsEffect</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>

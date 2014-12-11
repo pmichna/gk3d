@@ -75,12 +75,15 @@ namespace gk3d
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        private double time = 0;
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+            time += gameTime.ElapsedGameTime.TotalSeconds;
+
             //var rs = new RasterizerState {FillMode = FillMode.WireFrame};
             //GraphicsDevice.RasterizerState = rs;
-            _arena.Draw(_camera);
+            _arena.Draw(_camera, time);
             base.Draw(gameTime);
         }
     }

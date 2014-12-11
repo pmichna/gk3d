@@ -9,14 +9,14 @@ namespace gk3d
         private Vector3 Rotation { get; set; }
         private Vector3 Scale { get; set; }
         private Model Model { get; set; }
-        private readonly Matrix[] modelTransforms;
+        private readonly Matrix[] _modelTransforms;
         private GraphicsDevice _graphicsDevice;
-
+        
         public CModel(Model model, Vector3 position, Vector3 rotation, Vector3 scale, GraphicsDevice graphicsDevice)
         {
             Model = model;
-            modelTransforms = new Matrix[model.Bones.Count];
-            model.CopyAbsoluteBoneTransformsTo(modelTransforms);
+            _modelTransforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(_modelTransforms);
             GenerateTags();
             Position = position;
             Rotation = rotation;
@@ -24,12 +24,12 @@ namespace gk3d
             _graphicsDevice = graphicsDevice;
         }
 
-        public void Draw(Matrix view, Matrix projection, Vector3 CameraPosition)
+        public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition)
         {
             var baseWorld = Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
             foreach (var mesh in Model.Meshes)
             {
-                var localWorld = modelTransforms[mesh.ParentBone.Index] * baseWorld;
+                var localWorld = _modelTransforms[mesh.ParentBone.Index] * baseWorld;
                 foreach (var meshPart in mesh.MeshParts)
                 {
                     var effect = meshPart.Effect;
@@ -45,7 +45,7 @@ namespace gk3d
                         SetEffectParameter(effect, "World", localWorld);
                         SetEffectParameter(effect, "View", view);
                         SetEffectParameter(effect, "Projection", projection);
-                        SetEffectParameter(effect, "CameraPosition", CameraPosition);
+                        SetEffectParameter(effect, "CameraPosition", cameraPosition);
                     }
                 }
                 mesh.Draw();
