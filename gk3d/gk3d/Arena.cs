@@ -14,9 +14,9 @@ namespace gk3d
         private readonly List<CModel> _models = new List<CModel>(3);
         private readonly Effect _effect;
         //textures
-        private List<Texture2D> _courtTextures;
+        public List<Texture2D> CourtTextures;
         private Texture2D _courtLineTexture;
-        private int _activeCourtTexture;
+        public int ActiveCourtTexture;
         private VertexPositionNormalTexture[] _fieldVertices;
         private int[] _fieldIndices;
 
@@ -40,12 +40,12 @@ namespace gk3d
             SetModels(content, device);
 
             // textures
-            _courtTextures = new List<Texture2D>
+            CourtTextures = new List<Texture2D>
             {
                 content.Load<Texture2D>("court_green"),
                 content.Load<Texture2D>("court_wood")
             };
-            _activeCourtTexture = 0;
+            ActiveCourtTexture = 0;
             _courtLineTexture = content.Load<Texture2D>("court_lines");
             SetField();
         }
@@ -59,7 +59,7 @@ namespace gk3d
             _effect.Parameters["View"].SetValue(camera.ViewMatrix);
             _effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             _effect.Parameters["CameraPosition"].SetValue(camera.CameraPosition);
-            _effect.Parameters["xTexture"].SetValue(_courtTextures[0]);
+            _effect.Parameters["xTexture"].SetValue(CourtTextures[ActiveCourtTexture]);
             
             if ((int) time%2 == 1)
             {
@@ -128,11 +128,11 @@ namespace gk3d
             _fieldVertices[0].Position = new Vector3(-Width / 3, -Height / 2 + 2, Depth / 3);
             _fieldVertices[0].TextureCoordinate = new Vector2(0, 0);
             _fieldVertices[1].Position = new Vector3(Width / 3, -Height / 2 + 2, Depth / 3);
-            _fieldVertices[1].TextureCoordinate = new Vector2(0, 10);
+            _fieldVertices[1].TextureCoordinate = new Vector2(0, 1);
             _fieldVertices[2].Position = new Vector3(Width / 3, -Height / 2 + 2, -Depth / 3);
-            _fieldVertices[2].TextureCoordinate = new Vector2(10, 10);
+            _fieldVertices[2].TextureCoordinate = new Vector2(1, 1);
             _fieldVertices[3].Position = new Vector3(-Width / 3, -Height / 2 + 2, -Depth / 3);
-            _fieldVertices[3].TextureCoordinate = new Vector2(10, 0);
+            _fieldVertices[3].TextureCoordinate = new Vector2(1, 0);
 
             _fieldIndices = new int[6];
             _fieldIndices[0] = 0;

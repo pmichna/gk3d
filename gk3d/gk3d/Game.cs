@@ -20,6 +20,7 @@ namespace gk3d
         private const bool IS_FULL_SCREEN = false;
         private const string AUTHOR_NAME = "Pawel Michna";
         private static readonly Color ARENA_COLOR = Color.DarkCyan;
+        private bool _isTDown;
 
         private readonly GraphicsDeviceManager _graphics;
         private Arena _arena;
@@ -65,10 +66,26 @@ namespace gk3d
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            ProcessInput();
+            base.Update(gameTime);
+        }
+
+        private void ProcessInput()
+        {
             var keyState = Keyboard.GetState();
             if (keyState.IsKeyDown(Keys.Escape)) Exit();
+            
+            // court texture change
+            if (keyState.IsKeyDown(Keys.T) && !_isTDown)
+            {
+                _arena.ActiveCourtTexture = _arena.ActiveCourtTexture >= _arena.CourtTextures.Count - 1
+                    ? 0
+                    : _arena.ActiveCourtTexture + 1;
+                _isTDown = true;
+            }
+            if (keyState.IsKeyUp(Keys.T) && _isTDown)
+                _isTDown = false;
             _camera.Update(Mouse.GetState(), keyState);
-            base.Update(gameTime);
         }
 
         /// <summary>
