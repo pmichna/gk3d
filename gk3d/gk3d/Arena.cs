@@ -13,6 +13,8 @@ namespace gk3d
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<CModel> _models = new List<CModel>(3);
         private readonly Effect _effect;
+        public Fog Fog;
+
         //textures
         public List<Texture2D> CourtTextures;
         private Texture2D _courtLineTexture;
@@ -38,6 +40,7 @@ namespace gk3d
             _effect.Parameters["LightPosition"].SetValue(lightPosition);
             _effect.Parameters["LightDirection"].SetValue(lightDirection);
             SetModels(content, device);
+            Fog = new Fog();
 
             // textures
             CourtTextures = new List<Texture2D>
@@ -47,12 +50,11 @@ namespace gk3d
             };
             ActiveCourtTexture = 0;
             _courtLineTexture = content.Load<Texture2D>("court_lines");
-            _courtLineTexture = content.Load<Texture2D>("court_lines");
             SetField();
         }
 
-        Vector3 _pointLightColor = new Vector3(0.2f, 0.1f, 1);
-        Vector3 _pointLightSpecularColor = new Vector3(0.2f, 0.1f, 1);
+        Vector4 _pointLightColor = new Vector4(0.2f, 0.1f, 1, 1);
+        Vector4 _pointLightSpecularColor = new Vector4(0.2f, 0.1f, 1, 1);
 
         public void Draw(Camera camera, double time)
         {
@@ -62,18 +64,23 @@ namespace gk3d
             _effect.Parameters["CameraPosition"].SetValue(camera.CameraPosition);
             _effect.Parameters["xTexture"].SetValue(CourtTextures[ActiveCourtTexture]);
             _effect.Parameters["otherTexture"].SetValue(_courtLineTexture);
+
+            //_effect.Parameters["FogEnabled"].SetValue(Fog.IsFogEnabled? 1 : 0);
+            //_effect.Parameters["FogStart"].SetValue(Fog.FogStart);
+            //_effect.Parameters["FogEnd"].SetValue(Fog.FogEnd);
+            //_effect.Parameters["FogPower"].SetValue(Fog.FogPower);
             
             if ((int) time%2 == 1)
             {
-                _pointLightColor += new Vector3(0.2f, 0.1f, 0);
-                _pointLightSpecularColor += new Vector3(0, 0.1f, 0);
+                _pointLightColor += new Vector4(0.2f, 0.1f, 0, 1);
+                _pointLightSpecularColor += new Vector4(0, 0.1f, 0, 1);
                 _effect.Parameters["PointLightColor"].SetValue(_pointLightColor);
                 _effect.Parameters["PointLightSpecularColor"].SetValue(_pointLightSpecularColor);
             }
             else
             {
-                _pointLightColor -= new Vector3(0.2f, 0.1f, 0);
-                _pointLightSpecularColor -= new Vector3(0, 0.1f, 0);
+                _pointLightColor -= new Vector4(0.2f, 0.1f, 0, 1);
+                _pointLightSpecularColor -= new Vector4(0, 0.1f, 0, 1);
                 _effect.Parameters["PointLightColor"].SetValue(_pointLightColor);
                 _effect.Parameters["PointLightSpecularColor"].SetValue(_pointLightSpecularColor);
             }
@@ -86,6 +93,8 @@ namespace gk3d
             foreach (CModel model in _models)
                 model.Draw(camera.ViewMatrix, camera.ProjectionMatrix, camera.CameraPosition);
         }
+
+
 
         private void DrawCourtLines()
         {
@@ -164,7 +173,7 @@ namespace gk3d
 
         private void DrawNet()
         {
-            _effect.Parameters["DiffuseColor"].SetValue(Net.Color.ToVector3());
+            _effect.Parameters["DiffuseColor"].SetValue(Net.Color.ToVector4());
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -175,7 +184,7 @@ namespace gk3d
 
         private void DrawRightPost()
         {
-            _effect.Parameters["DiffuseColor"].SetValue(RightPost.Color.ToVector3());
+            _effect.Parameters["DiffuseColor"].SetValue(RightPost.Color.ToVector4());
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -187,7 +196,7 @@ namespace gk3d
 
         private void DrawLeftPost()
         {
-            _effect.Parameters["DiffuseColor"].SetValue(LeftPost.Color.ToVector3());
+            _effect.Parameters["DiffuseColor"].SetValue(LeftPost.Color.ToVector4());
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -199,7 +208,7 @@ namespace gk3d
 
         private void DrawArena()
         {
-            _effect.Parameters["DiffuseColor"].SetValue(Color.ToVector3());
+            _effect.Parameters["DiffuseColor"].SetValue(Color.ToVector4());
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();

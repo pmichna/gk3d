@@ -21,6 +21,8 @@ namespace gk3d
         private const string AUTHOR_NAME = "Pawel Michna";
         private static readonly Color ARENA_COLOR = Color.DarkCyan;
         private bool _isTDown;
+        private bool _isTildeDown;
+        private bool _isFDown;
 
         private readonly GraphicsDeviceManager _graphics;
         private Arena _arena;
@@ -74,6 +76,29 @@ namespace gk3d
         {
             var keyState = Keyboard.GetState();
             if (keyState.IsKeyDown(Keys.Escape)) Exit();
+
+            // fog enabled
+            //if (keyState.IsKeyDown(Keys.F) && !_isFDown)
+            //{
+            //    _arena.Fog.IsFogEnabled = !_arena.Fog.IsFogEnabled;
+            //    _isFDown = !_isFDown;
+            //}
+            //if (keyState.IsKeyUp(Keys.F) && _isFDown)
+            //    _isFDown = false;
+
+            //// fog power increment
+            //if (keyState.IsKeyDown(Keys.G))
+            //{
+            //    if (_arena.Fog.FogPower < 0.8f)
+            //        _arena.Fog.FogPower += 0.01f;
+            //}
+
+            //// fog power decrement
+            //if (keyState.IsKeyDown(Keys.H))
+            //{
+            //    if (_arena.Fog.FogPower > 0)
+            //        _arena.Fog.FogPower -= 0.01f;
+            //}
             
             // court texture change
             if (keyState.IsKeyDown(Keys.T) && !_isTDown)
@@ -85,6 +110,16 @@ namespace gk3d
             }
             if (keyState.IsKeyUp(Keys.T) && _isTDown)
                 _isTDown = false;
+
+            if (keyState.IsKeyDown(Keys.OemTilde) && !_isTildeDown)
+            {
+                _graphics.PreferMultiSampling = !_graphics.PreferMultiSampling;
+                _graphics.ApplyChanges();
+                _isTildeDown = !_isTildeDown;
+            }
+            if (keyState.IsKeyUp(Keys.OemTilde) && _isTildeDown)
+                _isTildeDown = false;
+
             _camera.Update(Mouse.GetState(), keyState);
         }
 

@@ -3,13 +3,13 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
-float3 DiffuseColor = float3(1, 1, 1);
-float3 AmbientLightColor = float3(.2, .2, .2);
+float4 DiffuseColor = float4(1, 1, 1, 1);
+float4 AmbientLightColor = float4(.2, .2, .2, 1);
 float3 LightPosition[NUMLIGHTS];
 float3 LightDirection[NUMLIGHTS];
 float3 LightColor = float3(1, 1, 1);
 float SpecularPower = 32;
-float3 SpecularColor = float3(1, 1, 1);
+float4 SpecularColor = float4(1, 1, 1, 1);
 bool TextureEnabled = false;
 bool IsOtherTextureEnabled = false;
 float3 CameraPosition;
@@ -20,8 +20,14 @@ float3 PointLightPosition = float3(0, 15, 195);
 float PointLightAttenuation = 8;
 float PointLightFalloff = 10;
 float PointLightSpecularPower = 200;
-float3 PointLightSpecularColor = float3(0, 0, 1);
-float3 PointLightColor = float3(0, 0, 1);
+float4  PointLightSpecularColor = float4(0, 0, 1, 1);
+float4 PointLightColor = float4(0, 0, 1, 1);
+
+// Fog
+float FogStart = 800;
+float FogEnd = 2000;
+float FogEnabled = 1;
+float FogPower = 0.8;
 
 texture xTexture;
 sampler TextureSampler = sampler_state {
@@ -50,6 +56,11 @@ struct VertexShaderOutput
 	float3 ViewDirection : TEXCOORD3;
 };
 
+float ComputeFogFactor(float d)
+{
+	return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled * FogPower;
+}
+
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
 	VertexShaderOutput output;
@@ -66,14 +77,15 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-	float3 diffuseColor = DiffuseColor;
+	float4 diffuseColor = DiffuseColor;
 	if (TextureEnabled)
 	{
 		diffuseColor *= tex2D(TextureSampler, input.UV);
 		if (IsOtherTextureEnabled)
 			diffuseColor += tex2D(OtherTextureSampler, input.UV);
 	}
-	float3 totalLight = AmbientLightColor;
+	float4 totalLight = float4(0, 0, 0, 1);
+	totalLight += AmbientLightColor;
 
 	// Point light
 	float3 lightDir = normalize(PointLightPosition - input.WorldPosition);
@@ -107,7 +119,12 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 		totalLight += diffuse * att * LightColor[i];
 	}
 
-	return float4(diffuseColor * totalLight, 1);
+	float4 finalColor = diffuseColor * totalLight;
+	float dist = distance(input.WorldPosition + input.ViewDirection, input.WorldPosition);
+	float fogFactor = ComputeFogFactor(dist);
+	finalColor.rgb = lerp(finalColor.rgb, float4(1, 1, 1, 1), fogFactor);
+
+	return finalColor;
 }
 
 technique Technique1

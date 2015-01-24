@@ -82,6 +82,8 @@ namespace gk3d
             if (effect.Parameters[paramName] == null) return;
             if (val is Vector3)
                 effect.Parameters[paramName].SetValue((Vector3)val);
+            else if (val is Vector4)
+                effect.Parameters[paramName].SetValue((Vector4)val);
             else if (val is bool)
                 effect.Parameters[paramName].SetValue((bool)val);
             else if (val is Matrix)
@@ -99,7 +101,7 @@ namespace gk3d
                     if (part.Effect is BasicEffect)
                     {
                         var effect = (BasicEffect) part.Effect;
-                        var tag = new MeshTag(effect.DiffuseColor, effect.Texture, effect.SpecularPower);
+                        var tag = new MeshTag(new Vector4(effect.DiffuseColor, 1), effect.Texture, effect.SpecularPower);
                         part.Tag = tag;
                     }
                 }
