@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace gk3d
 {
     class Cuboid
     {
-        public VertexPositionColorNormal[] Vertices { get; private set; }
+        public VertexPositionNormalTexture[] Vertices { get; private set; }
         public int[] Indices { get; private set; }
         public Vector3 Center { get; private set; }
         public int Width { get; private set; }
@@ -30,12 +31,13 @@ namespace gk3d
 
         private void SetUpVertices()
         {
-            Vertices = new VertexPositionColorNormal[8];
+            Vertices = new VertexPositionNormalTexture[8];
+            // floor
             Vertices[0].Position = new Vector3(Center.X - Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
             Vertices[1].Position = new Vector3(Center.X + Width / 2f, Center.Y - Height / 2f, Center.Z + Depth / 2f);
             Vertices[2].Position = new Vector3(Center.X + Width / 2f, Center.Y - Height / 2f, Center.Z - Depth / 2f);
             Vertices[3].Position = new Vector3(Center.X - Width / 2f, Center.Y - Height / 2f, Center.Z - Depth / 2f);
-
+            // ceiling
             Vertices[4].Position = new Vector3(Center.X - Width / 2f, Center.Y + Height / 2f, Center.Z + Depth / 2f);
             Vertices[5].Position = new Vector3(Center.X + Width / 2f, Center.Y + Height / 2f, Center.Z + Depth / 2f);
             Vertices[6].Position = new Vector3(Center.X + Width / 2f, Center.Y + Height / 2f, Center.Z - Depth / 2f);
@@ -102,25 +104,30 @@ namespace gk3d
 
         private void CalculateNormalsForTriangleList()
         {
-            for (var i = 0; i < Vertices.Length; i++)
-                Vertices[i].Normal = new Vector3(0, 0, 0);
+            CalculateNormalsForTriangleList(Vertices, Indices);
+        }
 
-            for (var i = 0; i < Indices.Length / 3; i++)
+        protected void CalculateNormalsForTriangleList(VertexPositionNormalTexture[] vertices, int[] indices)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+                vertices[i].Normal = new Vector3(0, 0, 0);
+
+            for (var i = 0; i < indices.Length / 3; i++)
             {
-                var firstVector = Vertices[Indices[i*3 + 1]].Position -
-                                  Vertices[Indices[i*3]].Position;
-                var secondVector = Vertices[Indices[i * 3 + 2]].Position -
-                                  Vertices[Indices[i * 3]].Position;
+                var firstVector = vertices[indices[i * 3 + 1]].Position -
+                                  vertices[indices[i * 3]].Position;
+                var secondVector = vertices[indices[i * 3 + 2]].Position -
+                                  vertices[indices[i * 3]].Position;
                 var normal = Vector3.Cross(secondVector, firstVector);
                 normal.Normalize();
 
-                Vertices[Indices[i*3]].Normal += normal;
-                Vertices[Indices[i*3 + 1]].Normal += normal;
-                Vertices[Indices[i*3 + 2]].Normal += normal;
+                vertices[indices[i * 3]].Normal += normal;
+                vertices[indices[i * 3 + 1]].Normal += normal;
+                vertices[indices[i * 3 + 2]].Normal += normal;
             }
 
-            for (var i = 0; i < Vertices.Length; i++)
-                Vertices[i].Normal.Normalize();
+            for (var i = 0; i < vertices.Length; i++)
+                vertices[i].Normal.Normalize();
         }
     }
 }

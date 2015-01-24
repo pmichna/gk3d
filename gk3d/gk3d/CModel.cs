@@ -10,7 +10,7 @@ namespace gk3d
         private Vector3 Scale { get; set; }
         private Model Model { get; set; }
         private readonly Matrix[] _modelTransforms;
-        private GraphicsDevice _graphicsDevice;
+        //private GraphicsDevice _graphicsDevice;
         
         public CModel(Model model, Vector3 position, Vector3 rotation, Vector3 scale, GraphicsDevice graphicsDevice)
         {
@@ -21,7 +21,7 @@ namespace gk3d
             Position = position;
             Rotation = rotation;
             Scale = scale;
-            _graphicsDevice = graphicsDevice;
+            //_graphicsDevice = graphicsDevice;
         }
 
         public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition)
@@ -52,23 +52,6 @@ namespace gk3d
             }
         }
 
-        // Store references to all of the model's current effects
-        public void CacheEffects()
-        {
-            foreach (var mesh in Model.Meshes)
-                foreach (var part in mesh.MeshParts)
-                    ((MeshTag)part.Tag).CachedEffect = part.Effect;
-        }
-
-        // Restore the effects referenced by the model's cache
-        public void RestoreEffects()
-        {
-            foreach (var mesh in Model.Meshes)
-                foreach (var part in mesh.MeshParts)
-                    if (((MeshTag)part.Tag).CachedEffect != null)
-                        part.Effect = ((MeshTag)part.Tag).CachedEffect;
-        }
-
         public void SetModelEffect(Effect effect, bool copyEffect)
         {
             foreach (var mesh in Model.Meshes)
@@ -82,7 +65,7 @@ namespace gk3d
                     // If this ModelMeshPart has a texture, set it to the effect
                     if (tag.Texture != null)
                     {
-                        SetEffectParameter(toSet, "BasicTexture", tag.Texture);
+                        SetEffectParameter(toSet, "xTexture", tag.Texture);
                         SetEffectParameter(toSet, "TextureEnabled", true);
                     }
                     else

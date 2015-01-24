@@ -22,10 +22,8 @@ float PointLightSpecularPower = 200;
 float3 PointLightSpecularColor = float3(0, 0, 1);
 float3 PointLightColor = float3(0, 0, 1);
 
-texture BasicTexture;
-sampler BasicTextureSampler = sampler_state {
-	texture = <BasicTexture>;
-};
+texture xTexture;
+sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 
 struct VertexShaderInput
 {
@@ -61,7 +59,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	float3 diffuseColor = DiffuseColor;
 	if (TextureEnabled)
-		diffuseColor *= tex2D(BasicTextureSampler, input.UV).rgb;
+		diffuseColor *= tex2D(TextureSampler, input.UV).rgb;
 	float3 totalLight = AmbientLightColor;
 
 	// Point light
