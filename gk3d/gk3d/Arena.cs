@@ -47,6 +47,7 @@ namespace gk3d
             };
             ActiveCourtTexture = 0;
             _courtLineTexture = content.Load<Texture2D>("court_lines");
+            _courtLineTexture = content.Load<Texture2D>("court_lines");
             SetField();
         }
 
@@ -60,6 +61,7 @@ namespace gk3d
             _effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             _effect.Parameters["CameraPosition"].SetValue(camera.CameraPosition);
             _effect.Parameters["xTexture"].SetValue(CourtTextures[ActiveCourtTexture]);
+            _effect.Parameters["otherTexture"].SetValue(_courtLineTexture);
             
             if ((int) time%2 == 1)
             {
@@ -80,8 +82,23 @@ namespace gk3d
             DrawRightPost();
             DrawNet();
             DrawField();
+            DrawCourtLines();
             foreach (CModel model in _models)
                 model.Draw(camera.ViewMatrix, camera.ProjectionMatrix, camera.CameraPosition);
+        }
+
+        private void DrawCourtLines()
+        {
+            _effect.Parameters["TextureEnabled"].SetValue(true);
+            _effect.Parameters["IsOtherTextureEnabled"].SetValue(true);
+            foreach (var pass in _effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                _graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _fieldVertices, 0, _fieldVertices.Length,
+                _fieldIndices, 0, _fieldIndices.Length / 3, VertexPositionNormalTexture.VertexDeclaration);
+            }
+            _effect.Parameters["TextureEnabled"].SetValue(false);
+            _effect.Parameters["IsOtherTextureEnabled"].SetValue(false);
         }
 
         private void DrawField()

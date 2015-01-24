@@ -11,6 +11,7 @@ float3 LightColor = float3(1, 1, 1);
 float SpecularPower = 32;
 float3 SpecularColor = float3(1, 1, 1);
 bool TextureEnabled = false;
+bool IsOtherTextureEnabled = false;
 float3 CameraPosition;
 float ConeAngle = 1.2;
 float LightFalloff = 20;
@@ -23,8 +24,16 @@ float3 PointLightSpecularColor = float3(0, 0, 1);
 float3 PointLightColor = float3(0, 0, 1);
 
 texture xTexture;
-sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
+sampler TextureSampler = sampler_state {
+	texture = <xTexture>;
+	magfilter = LINEAR;
+};
 
+texture otherTexture;
+sampler OtherTextureSampler = sampler_state {
+	texture = <otherTexture>;
+	magfilter = LINEAR;
+};
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
@@ -59,7 +68,11 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	float3 diffuseColor = DiffuseColor;
 	if (TextureEnabled)
-		diffuseColor *= tex2D(TextureSampler, input.UV).rgb;
+	{
+		diffuseColor *= tex2D(TextureSampler, input.UV);
+		if (IsOtherTextureEnabled)
+			diffuseColor += tex2D(OtherTextureSampler, input.UV);
+	}
 	float3 totalLight = AmbientLightColor;
 
 	// Point light
