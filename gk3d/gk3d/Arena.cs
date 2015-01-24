@@ -65,10 +65,10 @@ namespace gk3d
             _effect.Parameters["xTexture"].SetValue(CourtTextures[ActiveCourtTexture]);
             _effect.Parameters["otherTexture"].SetValue(_courtLineTexture);
 
-            //_effect.Parameters["FogEnabled"].SetValue(Fog.IsFogEnabled? 1 : 0);
-            //_effect.Parameters["FogStart"].SetValue(Fog.FogStart);
-            //_effect.Parameters["FogEnd"].SetValue(Fog.FogEnd);
-            //_effect.Parameters["FogPower"].SetValue(Fog.FogPower);
+            _effect.Parameters["FogEnabled"].SetValue(Fog.IsFogEnabled ? 1 : 0);
+            _effect.Parameters["FogStart"].SetValue(Fog.FogStart);
+            _effect.Parameters["FogEnd"].SetValue(Fog.FogEnd);
+            _effect.Parameters["FogPower"].SetValue(Fog.FogPower);
             
             if ((int) time%2 == 1)
             {

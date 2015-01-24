@@ -78,27 +78,27 @@ namespace gk3d
             if (keyState.IsKeyDown(Keys.Escape)) Exit();
 
             // fog enabled
-            //if (keyState.IsKeyDown(Keys.F) && !_isFDown)
-            //{
-            //    _arena.Fog.IsFogEnabled = !_arena.Fog.IsFogEnabled;
-            //    _isFDown = !_isFDown;
-            //}
-            //if (keyState.IsKeyUp(Keys.F) && _isFDown)
-            //    _isFDown = false;
+            if (keyState.IsKeyDown(Keys.F) && !_isFDown)
+            {
+                _arena.Fog.IsFogEnabled = !_arena.Fog.IsFogEnabled;
+                _isFDown = !_isFDown;
+            }
+            if (keyState.IsKeyUp(Keys.F) && _isFDown)
+                _isFDown = false;
 
-            //// fog power increment
-            //if (keyState.IsKeyDown(Keys.G))
-            //{
-            //    if (_arena.Fog.FogPower < 0.8f)
-            //        _arena.Fog.FogPower += 0.01f;
-            //}
+            // fog power increment
+            if (keyState.IsKeyDown(Keys.G))
+            {
+                if (_arena.Fog.FogPower < 0.8f)
+                    _arena.Fog.FogPower += 0.01f;
+            }
 
-            //// fog power decrement
-            //if (keyState.IsKeyDown(Keys.H))
-            //{
-            //    if (_arena.Fog.FogPower > 0)
-            //        _arena.Fog.FogPower -= 0.01f;
-            //}
+            // fog power decrement
+            if (keyState.IsKeyDown(Keys.H))
+            {
+                if (_arena.Fog.FogPower > 0)
+                    _arena.Fog.FogPower -= 0.01f;
+            }
             
             // court texture change
             if (keyState.IsKeyDown(Keys.T) && !_isTDown)

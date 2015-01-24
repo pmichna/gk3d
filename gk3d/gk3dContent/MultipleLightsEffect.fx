@@ -24,8 +24,8 @@ float4  PointLightSpecularColor = float4(0, 0, 1, 1);
 float4 PointLightColor = float4(0, 0, 1, 1);
 
 // Fog
-float FogStart = 800;
-float FogEnd = 2000;
+float FogStart = 5;
+float FogEnd = 400;
 float FogEnabled = 1;
 float FogPower = 0.8;
 

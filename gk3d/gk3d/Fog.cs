@@ -10,8 +10,8 @@
         public Fog()
         {
             IsFogEnabled = false;
-            FogStart = 800;
-            FogEnd = 2000;
+            FogStart = 5;
+            FogEnd = 100;
             FogPower = 0.5f;
         }
     }
