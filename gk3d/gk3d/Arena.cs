@@ -13,7 +13,7 @@ namespace gk3d
         private readonly GraphicsDevice _graphicsDevice;
         private readonly List<CModel> _models = new List<CModel>(3);
         private readonly Effect _effect;
-        public Fog Fog;
+        public FogEffect Fog;
 
         //textures
         public List<Texture2D> CourtTextures;
@@ -40,7 +40,7 @@ namespace gk3d
             _effect.Parameters["LightPosition"].SetValue(lightPosition);
             _effect.Parameters["LightDirection"].SetValue(lightDirection);
             SetModels(content, device);
-            Fog = new Fog();
+            Fog = new FogEffect();
 
             // textures
             CourtTextures = new List<Texture2D>
@@ -91,7 +91,7 @@ namespace gk3d
             DrawField();
             DrawCourtLines();
             foreach (CModel model in _models)
-                model.Draw(camera.ViewMatrix, camera.ProjectionMatrix, camera.CameraPosition);
+                model.Draw(camera.ViewMatrix, camera.ProjectionMatrix, camera.CameraPosition, Fog.IsFogEnabled, Fog.FogPower);
         }
 
 

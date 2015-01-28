@@ -24,7 +24,7 @@ namespace gk3d
             //_graphicsDevice = graphicsDevice;
         }
 
-        public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition, bool isFogEnabled, float fogPower)
         {
             var baseWorld = Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
             foreach (var mesh in Model.Meshes)
@@ -46,6 +46,8 @@ namespace gk3d
                         SetEffectParameter(effect, "View", view);
                         SetEffectParameter(effect, "Projection", projection);
                         SetEffectParameter(effect, "CameraPosition", cameraPosition);
+                        SetEffectParameter(effect, "FogEnabled", isFogEnabled);
+                        SetEffectParameter(effect, "FogPower", fogPower);
                     }
                 }
                 mesh.Draw();
@@ -90,6 +92,8 @@ namespace gk3d
                 effect.Parameters[paramName].SetValue((Matrix)val);
             else if (val is Texture2D)
                 effect.Parameters[paramName].SetValue((Texture2D)val);
+            else if (val is float)
+                effect.Parameters[paramName].SetValue((float)val);
         }
 
         private void GenerateTags()
