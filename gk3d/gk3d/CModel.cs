@@ -12,7 +12,7 @@ namespace gk3d
         private readonly Matrix[] _modelTransforms;
         //private GraphicsDevice _graphicsDevice;
         
-        public CModel(Model model, Vector3 position, Vector3 rotation, Vector3 scale, GraphicsDevice graphicsDevice)
+        public CModel(Model model, Vector3 position, Vector3 rotation, Vector3 scale)
         {
             Model = model;
             _modelTransforms = new Matrix[model.Bones.Count];

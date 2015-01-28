@@ -130,18 +130,15 @@ namespace gk3d
             _models.Add(new CModel(benchModel,
                 Center + new Vector3(-Width/3f, -Height/2f, -Depth/3f),
                 new Vector3(0, MathHelper.PiOver2, 0),
-                new Vector3(0.1f),
-                device));
+                new Vector3(0.1f)));
             _models.Add(new CModel(benchModel,
                 Center + new Vector3(Width/3f, -Height/2f, Depth/3f),
                 new Vector3(0, MathHelper.PiOver2, 0),
-                new Vector3(0.1f),
-                device));
+                new Vector3(0.1f)));
             _models.Add(new CModel(androidModel,
                 Center + new Vector3(0, -Height/2.3f, Depth/3f),
                 new Vector3(0, MathHelper.Pi, 0),
-                new Vector3(0.005f),
-                device));
+                new Vector3(0.005f)));
             foreach (var model in _models)
             {
                 model.SetModelEffect(_effect, true);
